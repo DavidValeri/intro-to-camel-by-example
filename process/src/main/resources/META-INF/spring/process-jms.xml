@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+           http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+           
+  <bean id="jms.connectionFactory" class="org.apache.activemq.pool.PooledConnectionFactory">
+    <property name="maxConnections" value="${example.jug.camel.jms.maxConnections}"/>
+    <property name="maximumActive" value="${example.jug.camel.jms.maximumActive}"/>
+    <property name="connectionFactory">
+      <bean id="jmsConnectionFactory" class="org.apache.activemq.ActiveMQConnectionFactory">
+        <property name="userName" value="${example.jug.camel.jms.user}"/>
+        <property name="password" value="${example.jug.camel.jms.password}"/>
+        <property name="brokerURL" value="${example.jug.camel.jms.brokerUrl}"/>
+        <property name="prefetchPolicy">
+          <bean class="org.apache.activemq.ActiveMQPrefetchPolicy">
+            <property name="queuePrefetch" value="1"/>
+          </bean>
+        </property>
+        <property name="redeliveryPolicy">
+          <bean class="org.apache.activemq.RedeliveryPolicy">
+            <property name="useExponentialBackOff" value="true"/>
+            <property name="initialRedeliveryDelay" value="${example.jug.camel.jms.initialRedeliveryDelay}"/>
+            <property name="maximumRedeliveries" value="${example.jug.camel.jms.maximumRedeliveries}"/>
+          </bean>
+        </property>
+      </bean>
+    </property>
+  </bean>
+    
+  <bean id="jms.transactionManager" class="org.springframework.jms.connection.JmsTransactionManager">
+    <property name="connectionFactory" ref="jms.connectionFactory"/>
+  </bean>
+  
+  <bean id="JMS_PROPAGATION_REQUIRED" class="org.apache.camel.spring.spi.SpringTransactionPolicy">
+    <property name="transactionManager" ref="jms.transactionManager"/>
+    <property name="propagationBehaviorName" value="PROPAGATION_REQUIRED"/>
+  </bean>
+  
+  <bean id="JMS_PROPAGATION_REQUIRES_NEW" class="org.apache.camel.spring.spi.SpringTransactionPolicy">
+    <property name="transactionManager" ref="jms.transactionManager"/>
+    <property name="propagationBehaviorName" value="PROPAGATION_REQUIRES_NEW"/>
+  </bean>
+</beans>

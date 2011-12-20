@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:camel="http://camel.apache.org/schema/spring"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+           http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+           http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
+  
+  <import resource="classpath:META-INF/spring/process-core.xml"/>
+  <import resource="classpath:META-INF/spring/process-ibatis.xml"/>
+  <import resource="classpath:META-INF/spring/process-jdbc.xml"/>
+  <import resource="classpath:META-INF/spring/process-jms.xml"/>
+  <import resource="classpath:META-INF/spring/process-config.xml"/>
+  
+  <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+    <property name="propertiesArray">
+      <list>
+        <ref bean="defaultProperties"/>
+	    <props>
+          <prop key="example.jug.camel.process.test.alternatePersistUri">mock:output</prop>
+          
+          <prop key="example.jug.camel.jdbc.driver.class">org.h2.Driver</prop>
+          <prop key="example.jug.camel.jdbc.url">jdbc:h2:mem:test</prop>
+          <prop key="example.jug.camel.jdbc.username">sa</prop>
+          <prop key="example.jug.camel.jdbc.password"></prop>
+          
+          <prop key="example.jug.camel.jms.brokerUrl">vm://localhost?broker.persistent=false</prop>
+          <prop key="example.jug.camel.jms.maximumRedeliveries">1</prop>
+          
+          <prop key="example.jug.camel.process.maxConcurrentConsumers">10</prop>
+	    </props>
+      </list>
+    </property>
+  </bean>
+</beans>

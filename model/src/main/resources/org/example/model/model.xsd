@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema 
+    xmlns="http://www.w3.org/2001/XMLSchema" 
+    xmlns:tns="http://www.example.org/model"
+    targetNamespace="http://www.example.org/model"
+    elementFormDefault="qualified">
+    
+    
+    <element name="aggregateRecord" type="tns:aggregateRecordType"/>
+    
+    <complexType name="aggregateRecordType">
+      <sequence>
+        <element name="date" type="dateTime"/>
+        <element ref="tns:record" minOccurs="0" maxOccurs="unbounded"/>
+      </sequence>
+    </complexType>
+    
+    <element name="record" type="tns:recordType"/>
+    
+    <complexType name="recordType">
+      <sequence>
+        <element name="id" type="string"/>
+        <element name="date" type="dateTime"/>
+        <element name="description" type="string"/>
+      </sequence>
+    </complexType>
+</schema>

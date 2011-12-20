@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="example.jug.camel.process">
+  
+  <typeAlias alias="Record" type="example.jug.camel.model.Record"/>
+  
+  <resultMap id="RecordResult" class="Record">
+    <result property="id" column="record_id"/>
+    <result property="date" column="date"/>
+  </resultMap>
+  
+  <select id="getRecord" resultMap="RecordResult" parameterClass="java.lang.String">
+    SELECT record_id, date
+    FROM   record
+    WHERE  record_id = #id#                                         
+  </select>
+  
+  <insert id="insertRecord" parameterClass="Record">
+    INSERT INTO record (record_id, date)
+    VALUES (#id#, #date#)
+  </insert>    
+</sqlMap>

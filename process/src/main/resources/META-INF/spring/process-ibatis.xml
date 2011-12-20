@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:camel="http://camel.apache.org/schema/spring"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+           http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+           http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
+  <!-- iBatis -->
+  
+  <bean id="sqlMapClient"
+        class="org.springframework.orm.ibatis.SqlMapClientFactoryBean">
+    <property name="configLocation"
+              value="classpath:example/jug/camel/model/ibatis/IBatis-SqlMapConfig.xml" />
+    <property name="dataSource" ref="jdbc.dataSource" />
+    <property name="useTransactionAwareDataSource" value="true" />
+  </bean>
+  
+  <bean id="sqlMapClientTemplate" class="org.springframework.orm.ibatis.SqlMapClientTemplate">
+    <property name="sqlMapClient" ref="sqlMapClient"/>
+  </bean>
+  
+  <bean id="ibatis" class="org.apache.camel.component.ibatis.IBatisComponent">
+    <property name="sqlMapClient" ref="sqlMapClient"/>
+  </bean>
+</beans>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+           http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+           http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+  
+  <util:properties id="defaultProperties">
+    <prop key="example.jug.camel.ingest.source.dir"></prop>
+    <prop key="example.jug.camel.ingest.fail.dir">./failed</prop>
+    <prop key="example.jug.camel.ingest.done.dir">./done</prop>
+    <prop key="example.jug.camel.ingest.records.queue.name">example.jug.camel.ingest.records.raw</prop>
+    
+    <prop key="example.jug.camel.jms.maxConnections">5</prop>
+    <prop key="example.jug.camel.jms.maximumActive">500</prop>
+    <prop key="example.jug.camel.jms.user">-=NULL=-</prop>
+    <prop key="example.jug.camel.jms.password">-=NULL=-</prop>
+    <prop key="example.jug.camel.jms.brokerUrl"></prop>
+    <prop key="example.jug.camel.jms.initialRedeliveryDelay">1000</prop>
+    <prop key="example.jug.camel.jms.maximumRedeliveries">6</prop>
+  </util:properties>
+</beans>

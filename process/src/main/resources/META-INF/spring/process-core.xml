@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:camel="http://camel.apache.org/schema/spring"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+           http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+           http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
+           
+  <!-- ActiveMQ -->
+  
+  <bean id="jmsTxConfig" class="org.apache.camel.component.jms.JmsConfiguration">
+    <property name="connectionFactory" ref="jms.connectionFactory"/>
+    <property name="transacted" value="true"/>
+    <property name="cacheLevelName" value="CACHE_CONSUMER"/>
+    <property name="acknowledgementModeName" value="SESSION_TRANSACTED"/>
+  </bean>
+  
+  <bean id="activemq" class="org.apache.activemq.camel.component.ActiveMQComponent">
+    <property name="configuration" ref="jmsTxConfig" />
+  </bean>
+  
+  <!-- Camel Context -->
+  
+  <camel:camelContext id="process-context">
+    <camel:routeBuilder ref="processorRouteBuilder" />
+  </camel:camelContext>
+  
+  <bean id="processorRouteBuilder" class="example.jug.camel.process.camel.ProcessorRouteBuilder">
+    <property name="recordsQueueName" value="${example.jug.camel.process.records.queue.name}"/>
+    <property name="alternatePersistEndpointUri" value="${example.jug.camel.process.test.alternatePersistUri}"/>
+    <property name="maxConcurrentConsumers" value="${example.jug.camel.process.maxConcurrentConsumers}"/>
+    <property name="errorQueueName" value="${example.jug.camel.process.error.queue.name}"/>
+  </bean>
+  
+  <!-- Beans -->
+  
+  <bean id="recordProcessor" class="example.jug.camel.logic.DefaultRecordProcessor"/>
+</beans>

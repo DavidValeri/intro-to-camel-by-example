@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:camel="http://camel.apache.org/schema/spring"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+           http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+           http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
+           
+  <camel:camelContext id="ingest-context">
+    <camel:routeBuilder ref="simpleFileIngestorRouteBuilder" />
+  </camel:camelContext>
+  
+  <!-- Beans -->
+  
+  <bean id="simpleFileIngestorRouteBuilder" class="example.jug.camel.ingest.SimpleFileIngestorRouteBuilder">
+    <property name="sourceDirPath" value="${example.jug.camel.ingest.source.dir}"/>
+    <property name="failDirPath" value="${example.jug.camel.ingest.fail.dir}"/>
+    <property name="doneDirPath" value="${example.jug.camel.ingest.done.dir}"/>
+    <property name="alternatePersistEndpointUri" value="${example.jug.camel.process.test.alternatePersistUri}"/>
+  </bean>
+  
+  <bean id="recordProcessor" class="example.jug.camel.logic.DefaultRecordProcessor"/>
+</beans>

@@ -97,6 +97,7 @@ public class ProcessorRouteBuilderTest {
     }
 
     @Test
+    @DirtiesContext
     public void testPositive() throws Exception {
 
         DatatypeFactory dtf = DatatypeFactory.newInstance();
@@ -124,6 +125,26 @@ public class ProcessorRouteBuilderTest {
         }
 
         assertTrue(expectedIds.isEmpty());
+    }
+    
+    @Test
+    @DirtiesContext
+    public void testDuplicates() throws Exception {
+        
+        DatatypeFactory dtf = DatatypeFactory.newInstance();
+
+        output.setExpectedMessageCount(1);
+
+        RecordType recordType = new RecordType();
+        recordType.setId("1");
+        recordType.setDate(dtf.newXMLGregorianCalendar(new GregorianCalendar()));
+        recordType.setDescription("Record number: 1");
+
+        trigger.sendBody(recordType);
+        
+        trigger.sendBody(recordType);
+
+        output.assertIsSatisfied();
     }
 
     @Test

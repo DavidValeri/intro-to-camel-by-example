@@ -10,9 +10,9 @@
     <version>1.0-SNAPSHOT</version>
   </parent>
 
-  <artifactId>jug-camel-process</artifactId>
+  <artifactId>jug-camel-scalable-process</artifactId>
   
-  <name>Example :: Camel :: JUG :: Process</name>
+  <name>Example :: Camel :: JUG :: Scalable Process</name>
   
   <dependencies>
     <dependency>

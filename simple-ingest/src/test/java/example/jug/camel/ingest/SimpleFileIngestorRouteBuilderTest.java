@@ -93,6 +93,7 @@ public class SimpleFileIngestorRouteBuilderTest {
 	}
 	
 	@Test
+	@DirtiesContext
 	public void testPositive() throws Exception {
 		
 		DatatypeFactory dtf = DatatypeFactory.newInstance();
@@ -126,6 +127,7 @@ public class SimpleFileIngestorRouteBuilderTest {
 	}
 	
 	@Test
+	@DirtiesContext
 	public void testInvalidSchema() throws Exception {
 		// not really atomic, but it works for tests
         FileUtils.moveFile(
@@ -135,6 +137,31 @@ public class SimpleFileIngestorRouteBuilderTest {
         
         validateFileMove(true);
 	}
+	
+	@Test
+	@DirtiesContext
+    public void testDuplicates() throws Exception {
+        
+	    DatatypeFactory dtf = DatatypeFactory.newInstance();
+
+	    output.setExpectedMessageCount(1);
+	    output.setResultWaitTime(3000l);
+
+        RecordType recordType = new RecordType();
+        recordType.setId("1");
+        recordType.setDate(dtf.newXMLGregorianCalendar(new GregorianCalendar()));
+        recordType.setDescription("Record number: 1");
+
+        trigger.sendBody(
+                SimpleFileIngestorRouteBuilder.HANDLE_RECORD_ROUTE_ENDPOINT_URI,
+                marshallToXml(recordType));
+        
+        trigger.sendBody(
+                SimpleFileIngestorRouteBuilder.HANDLE_RECORD_ROUTE_ENDPOINT_URI,
+                marshallToXml(recordType));
+
+        output.assertIsSatisfied();
+    }
 	
 	@Test
     @DirtiesContext

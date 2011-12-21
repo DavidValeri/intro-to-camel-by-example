@@ -1,23 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:camel="http://camel.apache.org/schema/spring"
+       xmlns:util="http://www.springframework.org/schema/util"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="
            http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-           http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
+           http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd
+           http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+           
+  <!-- Camel Context -->
            
   <camel:camelContext id="ingest-context">
     <camel:routeBuilder ref="simpleFileIngestorRouteBuilder" />
   </camel:camelContext>
   
-  <!-- Beans -->
-  
   <bean id="simpleFileIngestorRouteBuilder" class="example.jug.camel.ingest.SimpleFileIngestorRouteBuilder">
     <property name="sourceDirPath" value="${example.jug.camel.ingest.source.dir}"/>
     <property name="failDirPath" value="${example.jug.camel.ingest.fail.dir}"/>
     <property name="doneDirPath" value="${example.jug.camel.ingest.done.dir}"/>
-    <property name="alternatePersistEndpointUri" value="${example.jug.camel.process.test.alternatePersistUri}"/>
+    <property name="alternatePersistEndpointUri" value="${example.jug.camel.ingest.test.alternatePersistUri}"/>
+    <property name="idempotentRepository" ref="idempotentRepository"/>
   </bean>
   
+  <!-- Setup to use the database for storage and to use the route ID of the handler route as the processor name. -->
+  <bean id="idempotentRepository" class="org.apache.camel.processor.idempotent.jdbc.JdbcMessageIdRepository">
+    <constructor-arg ref="jdbc.dataSource"/>
+    <constructor-arg>
+      <util:constant static-field="example.jug.camel.ingest.SimpleFileIngestorRouteBuilder.HANDLE_RECORD_ROUTE_ID"/>
+    </constructor-arg>
+  </bean>
+  
+  <!-- Beans -->
+  
   <bean id="recordProcessor" class="example.jug.camel.logic.DefaultRecordProcessor"/>
+  
 </beans>

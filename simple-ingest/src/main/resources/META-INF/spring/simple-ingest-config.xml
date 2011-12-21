@@ -12,7 +12,6 @@
     <prop key="example.jug.camel.ingest.done.dir">./done</prop>
     <prop key="example.jug.camel.ingest.test.alternatePersistUri">-=NULL=-</prop>
     
-    
     <prop key="example.jug.camel.jdbc.driver.class">com.mysql.jdbc.Driver</prop>
     <prop key="example.jug.camel.jdbc.url"></prop>
     <prop key="example.jug.camel.jdbc.username">-=NULL=-</prop>
@@ -21,13 +20,5 @@
     <prop key="example.jug.camel.jdbc.pool.max">50</prop>
     <prop key="example.jug.camel.jdbc.validation.query"></prop>
     <prop key="example.jug.camel.jdbc.validation.active">false</prop>
-    
-    <prop key="example.jug.camel.jms.maxConnections">5</prop>
-    <prop key="example.jug.camel.jms.maximumActive">500</prop>
-    <prop key="example.jug.camel.jms.user">-=NULL=-</prop>
-    <prop key="example.jug.camel.jms.password">-=NULL=-</prop>
-    <prop key="example.jug.camel.jms.brokerUrl"></prop>
-    <prop key="example.jug.camel.jms.initialRedeliveryDelay">1000</prop>
-    <prop key="example.jug.camel.jms.maximumRedeliveries">6</prop>
   </util:properties>
 </beans>

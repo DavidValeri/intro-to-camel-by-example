@@ -1,11 +1,11 @@
 package example.jug.camel.model;
 
-import java.util.GregorianCalendar;
+import java.util.Date;
 
 public class Record {
 	
 	private String id;
-	private GregorianCalendar date;
+	private Date date;
 	
 	public String getId() {
 		return id;
@@ -15,11 +15,11 @@ public class Record {
 		this.id = id;
 	}
 	
-	public GregorianCalendar getDate() {
+	public Date getDate() {
 		return date;
 	}
 	
-	public void setDate(GregorianCalendar date) {
+	public void setDate(Date date) {
 		this.date = date;
 	}
 }

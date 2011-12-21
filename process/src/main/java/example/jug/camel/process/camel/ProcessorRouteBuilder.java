@@ -3,6 +3,7 @@ package example.jug.camel.process.camel;
 import org.apache.camel.LoggingLevel;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.model.dataformat.JaxbDataFormat;
+import org.apache.camel.spi.IdempotentRepository;
 import org.example.model.ObjectFactory;
 
 import example.jug.camel.logic.NonRecoverableExternalServiceException;
@@ -13,40 +14,38 @@ public class ProcessorRouteBuilder extends RouteBuilder {
     protected static final String ROUTE_ID_BASE = ProcessorRouteBuilder.class
             .getPackage().getName() + ".processor";
 
-    protected static final String HANDLE_RECORD_ROUTE_ID = ROUTE_ID_BASE
+    public static final String HANDLE_RECORD_ROUTE_ID = ROUTE_ID_BASE
             + ".handleRecord";
 
-    protected static final String HANDLE_RECORD_ROUTE_ENDPOINT_URI = "direct:"
+    public static final String HANDLE_RECORD_ROUTE_ENDPOINT_URI = "direct:"
             + HANDLE_RECORD_ROUTE_ID;
 
-    protected static final String TRANSFORM_RECORD_ROUTE_ID = ROUTE_ID_BASE
+    public static final String TRANSFORM_RECORD_ROUTE_ID = ROUTE_ID_BASE
             + ".transformRecord";
 
-    protected static final String TRANSFORM_RECORD_ROUTE_ENDPOINT_URI = "direct:"
+    public static final String TRANSFORM_RECORD_ROUTE_ENDPOINT_URI = "direct:"
             + TRANSFORM_RECORD_ROUTE_ID;
 
-    protected static final String PROCESS_RECORD_ROUTE_ID = ROUTE_ID_BASE
+    public static final String PROCESS_RECORD_ROUTE_ID = ROUTE_ID_BASE
             + ".processRecord";
 
-    protected static final String PROCESS_RECORD_ROUTE_ENDPOINT_URI = "direct:"
+    public static final String PROCESS_RECORD_ROUTE_ENDPOINT_URI = "direct:"
             + PROCESS_RECORD_ROUTE_ID;
 
-    protected static final String PERSIST_RECORD_ROUTE_ID = ROUTE_ID_BASE
+    public static final String PERSIST_RECORD_ROUTE_ID = ROUTE_ID_BASE
             + ".persistRecord";
 
-    protected static final String PERSIST_RECORD_ROUTE_ENDPOINT_URI = "direct:"
+    public static final String PERSIST_RECORD_ROUTE_ENDPOINT_URI = "direct:"
             + PERSIST_RECORD_ROUTE_ID;
     
-    protected static final String ERROR_ROUTE_ROUTE_ID = ROUTE_ID_BASE + "error";
+    public static final String ERROR_ROUTE_ROUTE_ID = ROUTE_ID_BASE + "error";
     
-    protected static final String ERROR_ROUTE_ENDPOINT_URI = "direct:" + ERROR_ROUTE_ROUTE_ID;
+    public static final String ERROR_ROUTE_ENDPOINT_URI = "direct:" + ERROR_ROUTE_ROUTE_ID;
 
     private String recordsQueueName;
-
     private String alternatePersistEndpointUri;
-
+    private IdempotentRepository<String> idempotentRepository;
     private int maxConcurrentConsumers;
-    
     private String errorQueueName;
 
     @Override
@@ -59,6 +58,7 @@ public class ProcessorRouteBuilder extends RouteBuilder {
             .unmarshal(jbdf)
             .log(LoggingLevel.INFO, "Handling record ${body.id}.")
             .to(TRANSFORM_RECORD_ROUTE_ENDPOINT_URI)
+            .idempotentConsumer(simple("${in.body.id}"), idempotentRepository)
             .to(PROCESS_RECORD_ROUTE_ENDPOINT_URI)
             .to(PERSIST_RECORD_ROUTE_ENDPOINT_URI);
 
@@ -109,6 +109,15 @@ public class ProcessorRouteBuilder extends RouteBuilder {
     public void setAlternatePersistEndpointUri(
             String alternatePersistEndpointUri) {
         this.alternatePersistEndpointUri = alternatePersistEndpointUri;
+    }
+    
+    public IdempotentRepository<String> getIdempotentRepository() {
+        return idempotentRepository;
+    }
+
+    public void setIdempotentRepository(
+            IdempotentRepository<String> idempotentRepository) {
+        this.idempotentRepository = idempotentRepository;
     }
 
     public int getMaxConcurrentConsumers() {

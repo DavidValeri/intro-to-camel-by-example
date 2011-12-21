@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:camel="http://camel.apache.org/schema/spring"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="
            http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-           http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
-           
+           http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+  
   <import resource="classpath:META-INF/spring/simple-ingest-config.xml"/>
   <import resource="classpath:META-INF/spring/simple-ingest-core.xml"/>
   <import resource="classpath:META-INF/spring/simple-ingest-ibatis.xml"/>
@@ -16,19 +15,18 @@
     <property name="propertiesArray">
       <list>
         <ref bean="defaultProperties"/>
-	    <props>
-	      <prop key="example.jug.camel.ingest.source.dir">./target/test-data/source</prop>
-          <prop key="example.jug.camel.ingest.test.alternatePersistUri">mock:output</prop>
+        <!-- Normally pulled from an external file, but internalized for simplicity in
+             this example. -->
+        <props>
+          <prop key="example.jug.camel.ingest.source.dir">../test-data/source</prop>
           
-          <prop key="example.jug.camel.jdbc.driver.class">org.h2.Driver</prop>
-          <prop key="example.jug.camel.jdbc.url">jdbc:h2:mem:test</prop>
-          <prop key="example.jug.camel.jdbc.username">sa</prop>
-          <prop key="example.jug.camel.jdbc.password"></prop>
-	    </props>
+          <prop key="example.jug.camel.jdbc.driver.class">com.mysql.jdbc.Driver</prop>
+          <prop key="example.jug.camel.jdbc.url">jdbc:mysql://localhost:3306/test</prop>
+          <prop key="example.jug.camel.jdbc.username">test</prop>
+          <prop key="example.jug.camel.jdbc.password">password</prop>
+        </props>
       </list>
     </property>
   </bean>
   
-  <!-- Override the JDBC based definition and use an in-memory implementation for testing. -->
-  <bean id="idempotentRepository" class="org.apache.camel.processor.idempotent.MemoryIdempotentRepository"/>
 </beans>

@@ -10,9 +10,9 @@
     <version>1.0-SNAPSHOT</version>
   </parent>
 
-  <artifactId>jug-camel-ingest</artifactId>
+  <artifactId>jug-camel-scalable-ingest</artifactId>
   
-  <name>Example :: Camel :: JUG :: Ingest</name>
+  <name>Example :: Camel :: JUG :: Scalable Ingest</name>
   
   <dependencies>
     <dependency>

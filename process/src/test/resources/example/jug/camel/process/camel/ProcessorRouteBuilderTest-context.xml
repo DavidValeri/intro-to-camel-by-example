@@ -32,4 +32,7 @@
       </list>
     </property>
   </bean>
+  
+  <!-- Override the JDBC based definition and use an in-memory implementation for testing. -->
+  <bean id="idempotentRepository" class="org.apache.camel.processor.idempotent.MemoryIdempotentRepository"/>
 </beans>

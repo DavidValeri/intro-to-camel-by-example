@@ -8,6 +8,7 @@ import java.util.Map;
 import org.apache.camel.LoggingLevel;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.model.dataformat.JaxbDataFormat;
+import org.apache.camel.spi.IdempotentRepository;
 import org.example.model.ObjectFactory;
 
 import example.jug.camel.logic.NonRecoverableExternalServiceException;
@@ -18,34 +19,34 @@ public class SimpleFileIngestorRouteBuilder extends RouteBuilder {
 	protected static final String ROUTE_ID_BASE = SimpleFileIngestorRouteBuilder.class
 			.getPackage().getName() + ".fileIngestor";
 	
-	protected static final String READ_FILE_ROUTE_ID = ROUTE_ID_BASE
+	public static final String READ_FILE_ROUTE_ID = ROUTE_ID_BASE
 			+ ".readFile";
 	
-	protected static final String HANDLE_RECORD_ROUTE_ID = ROUTE_ID_BASE
+	public static final String HANDLE_RECORD_ROUTE_ID = ROUTE_ID_BASE
             + ".handleRecord";
 
-    protected static final String HANDLE_RECORD_ROUTE_ENDPOINT_URI = "direct:"
+	public static final String HANDLE_RECORD_ROUTE_ENDPOINT_URI = "direct:"
             + HANDLE_RECORD_ROUTE_ID;
 	
-	protected static final String TRANSFORM_RECORD_ROUTE_ID = ROUTE_ID_BASE
+	public static final String TRANSFORM_RECORD_ROUTE_ID = ROUTE_ID_BASE
             + ".transformRecord";
 
-    protected static final String TRANSFORM_RECORD_ROUTE_ENDPOINT_URI = "direct:"
+	public static final String TRANSFORM_RECORD_ROUTE_ENDPOINT_URI = "direct:"
             + TRANSFORM_RECORD_ROUTE_ID;
 
-    protected static final String PROCESS_RECORD_ROUTE_ID = ROUTE_ID_BASE
+	public static final String PROCESS_RECORD_ROUTE_ID = ROUTE_ID_BASE
             + ".processRecord";
 
-    protected static final String PROCESS_RECORD_ROUTE_ENDPOINT_URI = "direct:"
+	public static final String PROCESS_RECORD_ROUTE_ENDPOINT_URI = "direct:"
             + PROCESS_RECORD_ROUTE_ID;
 
-    protected static final String PERSIST_RECORD_ROUTE_ID = ROUTE_ID_BASE
+	public static final String PERSIST_RECORD_ROUTE_ID = ROUTE_ID_BASE
             + ".persistRecord";
 
-    protected static final String PERSIST_RECORD_ROUTE_ENDPOINT_URI = "direct:"
+	public static final String PERSIST_RECORD_ROUTE_ENDPOINT_URI = "direct:"
             + PERSIST_RECORD_ROUTE_ID;
 	
-	protected static final Map<String, String> NAMESPACES;
+	public static final Map<String, String> NAMESPACES;
 	
 	static {
 		Map<String, String> tempNamespaces = new HashMap<String, String>();
@@ -58,6 +59,7 @@ public class SimpleFileIngestorRouteBuilder extends RouteBuilder {
 	private String doneDirPath;
 	private String failDirPath;
 	private String alternatePersistEndpointUri;
+	private IdempotentRepository<String> idempotentRepository;
 	
 	@Override
 	public void configure() throws Exception {
@@ -69,7 +71,9 @@ public class SimpleFileIngestorRouteBuilder extends RouteBuilder {
 			.log(LoggingLevel.INFO, "Processing file: ${header.CamelFilePath}")
 			.to("validator:org/example/model/model.xsd")
 			.split()
-				.xpath("/example:aggregateRecord/example:record", NAMESPACES)
+			    .xpath("/example:aggregateRecord/example:record", NAMESPACES)
+			    .executorService(getContext().getExecutorServiceManager().newThreadPool(
+			            this, READ_FILE_ROUTE_ID, 10, 20))
 				.to(HANDLE_RECORD_ROUTE_ENDPOINT_URI);
 		
         from(HANDLE_RECORD_ROUTE_ENDPOINT_URI)
@@ -77,6 +81,7 @@ public class SimpleFileIngestorRouteBuilder extends RouteBuilder {
             .unmarshal(jbdf)
             .log(LoggingLevel.INFO, "Handling record ${body.id}.")
             .to(TRANSFORM_RECORD_ROUTE_ENDPOINT_URI)
+            .idempotentConsumer(simple("${in.body.id}"), idempotentRepository)
             .to(PROCESS_RECORD_ROUTE_ENDPOINT_URI)
             .to(PERSIST_RECORD_ROUTE_ENDPOINT_URI);
     
@@ -145,8 +150,17 @@ public class SimpleFileIngestorRouteBuilder extends RouteBuilder {
             String alternatePersistEndpointUri) {
         this.alternatePersistEndpointUri = alternatePersistEndpointUri;
     }
-	
-	protected String getFileSourceUri() {
+    
+    public IdempotentRepository<String> getIdempotentRepository() {
+        return idempotentRepository;
+    }
+
+    public void setIdempotentRepository(
+            IdempotentRepository<String> idempotentRepository) {
+        this.idempotentRepository = idempotentRepository;
+    }
+
+    protected String getFileSourceUri() {
 		return "file://" + sourceDirPath + "?moveFailed=" + failDirPath + "&move=" + doneDirPath;
 	}
 	
@@ -154,7 +168,7 @@ public class SimpleFileIngestorRouteBuilder extends RouteBuilder {
         if (alternatePersistEndpointUri != null) {
             return alternatePersistEndpointUri;
         } else {
-            return "ibatis:example.jug.camel.process.insertRecord?statementType=insert";
+            return "ibatis:example.jug.camel.process.insertRecord?statementType=Insert";
         }
     }
 }

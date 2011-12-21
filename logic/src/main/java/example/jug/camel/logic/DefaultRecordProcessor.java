@@ -27,7 +27,7 @@ public class DefaultRecordProcessor implements RecordProcessor {
 		LOG.debug("Transforming record: {}", recordType.getId());
 		Record record = new Record();
 		record.setId(recordType.getId());
-		record.setDate(recordType.getDate().toGregorianCalendar());
+		record.setDate(recordType.getDate().toGregorianCalendar().getTime());
 		LOG.info("Transformed record: {}", recordType.getId());
 		return record;
 	}

@@ -21,12 +21,14 @@
   </properties>
 
   <modules>
-    <module>simple-ingest</module>
-    <module>simple-ingest-app</module>
-    <module>ingest</module>
     <module>logic</module>
     <module>model</module>
-    <module>process</module>
+    <module>scalable-ingest</module>
+    <module>scalable-ingest-app</module>
+    <module>scalable-process</module>
+    <module>scalable-process-app</module>
+    <module>simple-ingest</module>
+    <module>simple-ingest-app</module>
   </modules>
   
   <repositories>

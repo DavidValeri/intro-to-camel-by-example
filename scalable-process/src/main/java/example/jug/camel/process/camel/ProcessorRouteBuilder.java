@@ -140,7 +140,7 @@ public class ProcessorRouteBuilder extends RouteBuilder {
         if (alternatePersistEndpointUri != null) {
             return alternatePersistEndpointUri;
         } else {
-            return "ibatis:example.jug.camel.process.insertRecord?statementType=insert";
+            return "ibatis:example.jug.camel.process.insertRecord?statementType=Insert";
         }
     }
 

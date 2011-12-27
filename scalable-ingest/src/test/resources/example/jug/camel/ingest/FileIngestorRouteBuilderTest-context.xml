@@ -6,9 +6,9 @@
            http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
            http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
            
-  <import resource="classpath:META-INF/spring/ingest-core.xml"/>
-  <import resource="classpath:META-INF/spring/ingest-jms.xml"/>
-  <import resource="classpath:META-INF/spring/ingest-config.xml"/>
+  <import resource="classpath:META-INF/spring/scalable-ingest-core.xml"/>
+  <import resource="classpath:META-INF/spring/scalable-ingest-jms.xml"/>
+  <import resource="classpath:META-INF/spring/scalable-ingest-config.xml"/>
   
   <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
     <property name="propertiesArray">

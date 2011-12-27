@@ -53,6 +53,7 @@ public class FileIngestorRouteBuilder extends RouteBuilder {
 				.maximumRedeliveries(2)
 				.useExponentialBackOff()
 			.end()
+			// TODO Need right properties for split info since it is not appearing in the logs
 			.log(LoggingLevel.INFO, "Enqueuing record ${property.SPLIT_INDEX} "
 					+ "of ${property.SPLIT_SIZE}")
 			.to(getEnqueueRecordsDestinationUri());

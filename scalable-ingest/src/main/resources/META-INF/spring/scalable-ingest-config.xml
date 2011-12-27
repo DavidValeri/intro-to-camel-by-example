@@ -18,6 +18,6 @@
     <prop key="example.jug.camel.jms.password">-=NULL=-</prop>
     <prop key="example.jug.camel.jms.brokerUrl"></prop>
     <prop key="example.jug.camel.jms.initialRedeliveryDelay">1000</prop>
-    <prop key="example.jug.camel.jms.maximumRedeliveries">6</prop>
+    <prop key="example.jug.camel.jms.maximumRedeliveries">3</prop>
   </util:properties>
 </beans>

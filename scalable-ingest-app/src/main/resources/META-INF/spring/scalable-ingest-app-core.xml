@@ -5,10 +5,9 @@
            http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
            http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
   
-  <import resource="classpath:META-INF/spring/simple-ingest-config.xml"/>
-  <import resource="classpath:META-INF/spring/simple-ingest-core.xml"/>
-  <import resource="classpath:META-INF/spring/simple-ingest-ibatis.xml"/>
-  <import resource="classpath:META-INF/spring/simple-ingest-jdbc.xml"/>
+  <import resource="classpath:META-INF/spring/scalable-ingest-config.xml"/>
+  <import resource="classpath:META-INF/spring/scalable-ingest-core.xml"/>
+  <import resource="classpath:META-INF/spring/scalable-ingest-jms.xml"/>
   
   <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
     <property name="nullValue" value="-=NULL=-"></property>

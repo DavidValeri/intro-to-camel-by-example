@@ -9,7 +9,7 @@
   <util:properties id="defaultProperties">
     <prop key="example.jug.camel.process.test.alternatePersistUri">-=NULL=-</prop>
     <prop key="example.jug.camel.process.records.queue.name">example.jug.camel.ingest.records.raw</prop>
-    <prop key="example.jug.camel.process.maxConcurrentConsumers">1</prop>
+    <prop key="example.jug.camel.process.maxConcurrentConsumers">10</prop>
     <prop key="example.jug.camel.process.error.queue.name">ActiveMQ.DLQ</prop>
     
     <prop key="example.jug.camel.jdbc.driver.class">com.mysql.jdbc.Driver</prop>
@@ -27,6 +27,6 @@
     <prop key="example.jug.camel.jms.password">-=NULL=-</prop>
     <prop key="example.jug.camel.jms.brokerUrl"></prop>
     <prop key="example.jug.camel.jms.initialRedeliveryDelay">1000</prop>
-    <prop key="example.jug.camel.jms.maximumRedeliveries">6</prop>
+    <prop key="example.jug.camel.jms.maximumRedeliveries">3</prop>
   </util:properties>
 </beans>

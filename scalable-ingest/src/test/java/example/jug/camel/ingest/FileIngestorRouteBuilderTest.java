@@ -12,19 +12,22 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
 import javax.xml.datatype.DatatypeFactory;
 
-import org.apache.camel.CamelContext;
 import org.apache.camel.EndpointInject;
 import org.apache.camel.Exchange;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.mock.MockEndpoint;
+import org.apache.camel.model.ModelCamelContext;
 import org.apache.camel.model.RouteDefinition;
 import org.apache.camel.model.dataformat.JaxbDataFormat;
+import org.apache.camel.spring.SpringCamelContext;
 import org.apache.commons.io.FileUtils;
 import org.example.model.AggregateRecordType;
 import org.example.model.ObjectFactory;
 import org.example.model.RecordType;
 import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,7 +50,25 @@ public class FileIngestorRouteBuilderTest {
 	private MockEndpoint output;
 	
 	@Autowired
-	private CamelContext context;
+	private ModelCamelContext context;
+	
+	/**
+     * Stop Camel from starting when Spring boots up.  We do this as it
+     * is 1) quicker when using adviceWith and 2) because it is required
+     * when using certain advice features.
+     */
+    @BeforeClass
+    public static void stopCamelStart() {
+        SpringCamelContext.setNoStart(true);
+    }
+    
+    /**
+     * Re-enable Camel startup with Spring.
+     */
+    @AfterClass
+    public static void enableCamelStart() {
+        SpringCamelContext.setNoStart(false);
+    }
 	
 	@Before
     public void setup() throws Exception {
@@ -86,6 +107,7 @@ public class FileIngestorRouteBuilderTest {
 	
 	@Test
 	public void testPositive() throws Exception {
+	    context.start();
 		
 		DatatypeFactory dtf = DatatypeFactory.newInstance();
         
@@ -118,6 +140,8 @@ public class FileIngestorRouteBuilderTest {
 	
 	@Test
 	public void testInvalidSchema() throws Exception {
+	    context.start();
+	    
 		// not really atomic, but it works for tests
         FileUtils.moveFile(
         		new File("./target/test-classes/example/jug/camel/ingest/"
@@ -127,7 +151,6 @@ public class FileIngestorRouteBuilderTest {
         validateFileMove(true);
 	}
 	
-	@SuppressWarnings("deprecation")
 	@Test
 	@DirtiesContext
 	public void testJmsFailure() throws Exception {
@@ -147,6 +170,7 @@ public class FileIngestorRouteBuilderTest {
 			}
 		});
 		
+		context.start();
 		
 		DatatypeFactory dtf = DatatypeFactory.newInstance();
         

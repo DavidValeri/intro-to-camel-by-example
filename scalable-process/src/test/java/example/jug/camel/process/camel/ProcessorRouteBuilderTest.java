@@ -10,20 +10,24 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.xml.datatype.DatatypeFactory;
 
-import org.apache.camel.CamelContext;
 import org.apache.camel.EndpointInject;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.camel.Produce;
 import org.apache.camel.ProducerTemplate;
+import org.apache.camel.builder.AdviceWithRouteBuilder;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.mock.MockEndpoint;
+import org.apache.camel.model.ModelCamelContext;
 import org.apache.camel.model.RouteDefinition;
 import org.apache.camel.model.dataformat.JaxbDataFormat;
+import org.apache.camel.spring.SpringCamelContext;
 import org.example.model.ObjectFactory;
 import org.example.model.RecordType;
 import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,7 +56,25 @@ public class ProcessorRouteBuilderTest {
     private ProducerTemplate trigger;
 
     @Autowired
-    private CamelContext context;
+    private ModelCamelContext context;
+    
+    /**
+     * Stop Camel from starting when Spring boots up.  We do this as it
+     * is 1) quicker when using adviceWith and 2) because it is required
+     * when using certain advice features.
+     */
+    @BeforeClass
+    public static void stopCamelStart() {
+        SpringCamelContext.setNoStart(true);
+    }
+    
+    /**
+     * Re-enable Camel startup with Spring.
+     */
+    @AfterClass
+    public static void enableCamelStart() {
+        SpringCamelContext.setNoStart(false);
+    }
 
     @Before
     public void setup() throws Exception {
@@ -99,6 +121,7 @@ public class ProcessorRouteBuilderTest {
     @Test
     @DirtiesContext
     public void testPositive() throws Exception {
+        context.start();
 
         DatatypeFactory dtf = DatatypeFactory.newInstance();
 
@@ -130,6 +153,7 @@ public class ProcessorRouteBuilderTest {
     @Test
     @DirtiesContext
     public void testDuplicates() throws Exception {
+        context.start();
         
         DatatypeFactory dtf = DatatypeFactory.newInstance();
 
@@ -152,6 +176,8 @@ public class ProcessorRouteBuilderTest {
     public void testTerminalJdbcFailure() throws Exception {
 
         configureJdbcFailure(3);
+        
+        context.start();
 
         DatatypeFactory dtf = DatatypeFactory.newInstance();
 
@@ -194,6 +220,8 @@ public class ProcessorRouteBuilderTest {
     public void testNonTerminalJdbcFailure() throws Exception {
 
         configureJdbcFailure(1);
+        
+        context.start();
 
         DatatypeFactory dtf = DatatypeFactory.newInstance();
 
@@ -231,6 +259,8 @@ public class ProcessorRouteBuilderTest {
     public void testRecoverableExternalServiceException() throws Exception {
         configureProcessRecordFailure(3, true);
         
+        context.start();
+        
         DatatypeFactory dtf = DatatypeFactory.newInstance();
 
         output.setExpectedMessageCount(1);
@@ -254,6 +284,8 @@ public class ProcessorRouteBuilderTest {
     public void testNonRecoverableExternalServiceException() throws Exception {
         configureProcessRecordFailure(1, false);
         
+        context.start();
+        
         DatatypeFactory dtf = DatatypeFactory.newInstance();
 
         output.setExpectedMessageCount(0);
@@ -271,13 +303,12 @@ public class ProcessorRouteBuilderTest {
         dlq.assertIsSatisfied();
     }
 
-    @SuppressWarnings("deprecation")
     protected void configureJdbcFailure(final int failureCount)
             throws Exception {
         RouteDefinition routeDef = context
                 .getRouteDefinition(ProcessorRouteBuilder.PERSIST_RECORD_ROUTE_ID);
 
-        routeDef.adviceWith(context, new RouteBuilder() {
+        routeDef.adviceWith(context, new AdviceWithRouteBuilder() {
 
             private AtomicInteger count = new AtomicInteger(0);
 
@@ -302,13 +333,12 @@ public class ProcessorRouteBuilderTest {
         });
     }
 
-    @SuppressWarnings("deprecation")
     protected void configureProcessRecordFailure(final int failureCount, 
             final boolean recoverableFailure) throws Exception {
         RouteDefinition routeDef = context
                 .getRouteDefinition(ProcessorRouteBuilder.PROCESS_RECORD_ROUTE_ID);
 
-        routeDef.adviceWith(context, new RouteBuilder() {
+        routeDef.adviceWith(context, new AdviceWithRouteBuilder() {
 
             private AtomicInteger count = new AtomicInteger(0);
 

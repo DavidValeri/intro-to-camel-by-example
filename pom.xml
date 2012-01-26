@@ -14,7 +14,7 @@
   
   <properties>
     <activemq.version>5.5.1</activemq.version>
-    <camel.version>2.9.0-SNAPSHOT</camel.version>
+    <camel.version>2.9.0</camel.version>
     <junit.version>4.7</junit.version>
     <slf4j.version>1.5.11</slf4j.version>
     <spring.version>3.0.6.RELEASE</spring.version>

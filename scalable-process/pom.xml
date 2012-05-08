@@ -5,24 +5,24 @@
   <modelVersion>4.0.0</modelVersion>
   
   <parent>
-    <groupId>example</groupId>
-    <artifactId>jug-camel</artifactId>
+    <groupId>com.fusesource.example.camel</groupId>
+    <artifactId>camel-by-example</artifactId>
     <version>1.0-SNAPSHOT</version>
   </parent>
 
-  <artifactId>jug-camel-scalable-process</artifactId>
+  <artifactId>camel-by-example-scalable-process</artifactId>
   
-  <name>Example :: Camel :: JUG :: Scalable Process</name>
+  <name>FuseSource :: Example :: Camel :: By Example :: Scalable Process</name>
   
   <dependencies>
     <dependency>
       <groupId>${project.groupId}</groupId>
-      <artifactId>jug-camel-model</artifactId>
+      <artifactId>camel-by-example-model</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
       <groupId>${project.groupId}</groupId>
-      <artifactId>jug-camel-logic</artifactId>
+      <artifactId>camel-by-example-logic</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>

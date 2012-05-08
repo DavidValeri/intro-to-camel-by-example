@@ -5,21 +5,21 @@
   <modelVersion>4.0.0</modelVersion>
   
   <parent>
-    <groupId>example</groupId>
-    <artifactId>jug-camel</artifactId>
+    <groupId>com.fusesource.example.camel</groupId>
+    <artifactId>camel-by-example</artifactId>
     <version>1.0-SNAPSHOT</version>
   </parent>
 
-  <artifactId>jug-camel-simple-ingest-app</artifactId>
+  <artifactId>camel-by-example-simple-ingest-app</artifactId>
 
   <packaging>war</packaging>
   
-  <name>Example :: Camel :: JUG :: Simple Ingest App</name>
+  <name>FuseSource :: Example :: Camel :: By Example :: Simple Ingest App</name>
   
   <dependencies>
     <dependency>
       <groupId>${project.groupId}</groupId>
-      <artifactId>jug-camel-simple-ingest</artifactId>
+      <artifactId>camel-by-example-simple-ingest</artifactId>
       <version>${project.version}</version>
       <scope>runtime</scope>
     </dependency>

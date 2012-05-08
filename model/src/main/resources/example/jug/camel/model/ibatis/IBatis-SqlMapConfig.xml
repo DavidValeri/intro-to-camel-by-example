@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE sqlMapConfig PUBLIC "-//iBATIS.com//DTD SQL Map Config 2.0//EN"
-        "http://ibatis.apache.org/dtd/sql-map-config-2.dtd">
-
-<sqlMapConfig>
-  <settings useStatementNamespaces="true" lazyLoadingEnabled="false"/>
-  <sqlMap resource="example/jug/camel/model/ibatis/IBatis-SqlMap.xml"/> 
-</sqlMapConfig>

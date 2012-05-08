@@ -1,4 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+  Copyright 2012 FuseSource
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+ -->
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:camel="http://camel.apache.org/schema/spring"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -21,10 +36,10 @@
     <camel:routeBuilder ref="fileIngestorRouteBuilder" />
   </camel:camelContext>
   
-  <bean id="fileIngestorRouteBuilder" class="example.jug.camel.ingest.FileIngestorRouteBuilder">
-    <property name="sourceDirPath" value="${example.jug.camel.ingest.source.dir}"/>
-    <property name="failDirPath" value="${example.jug.camel.ingest.fail.dir}"/>
-    <property name="doneDirPath" value="${example.jug.camel.ingest.done.dir}"/>
-    <property name="recordsQueueName" value="${example.jug.camel.ingest.records.queue.name}"/>
+  <bean id="fileIngestorRouteBuilder" class="com.fusesource.example.camel.ingest.FileIngestorRouteBuilder">
+    <property name="sourceDirPath" value="${com.fusesource.example.camel.ingest.source.dir}"/>
+    <property name="failDirPath" value="${com.fusesource.example.camel.ingest.fail.dir}"/>
+    <property name="doneDirPath" value="${com.fusesource.example.camel.ingest.done.dir}"/>
+    <property name="recordsQueueName" value="${com.fusesource.example.camel.ingest.records.queue.name}"/>
   </bean>
 </beans>

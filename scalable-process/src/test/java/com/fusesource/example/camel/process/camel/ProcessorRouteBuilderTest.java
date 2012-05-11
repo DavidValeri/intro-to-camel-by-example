@@ -244,7 +244,7 @@ public class ProcessorRouteBuilderTest {
         Set<String> expectedIds = new HashSet<String>();
 
         output.setExpectedMessageCount(10);
-        output.setResultWaitTime(12000l);
+        output.setResultWaitTime(15000l);
 
         dlq.setExpectedMessageCount(0);
 

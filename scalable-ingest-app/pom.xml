@@ -25,7 +25,7 @@
     <version>1.0-SNAPSHOT</version>
   </parent>
 
-  <artifactId>camel-by-example-ingest-app</artifactId>
+  <artifactId>camel-by-example-scalable-ingest-app</artifactId>
 
   <packaging>war</packaging>
   

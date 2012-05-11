@@ -52,25 +52,14 @@ public class FileIngestorRouteBuilder extends RouteBuilder {
 	
 	@Override
 	public void configure() throws Exception {
-		
-		from(getFileSourceUri())
-			.routeId(READ_FILE_ROUTE_ID)
-			.log(LoggingLevel.INFO, "Processing file: ${header.CamelFilePath}")
-			.to("validator:org/example/model/model.xsd")
-			.split()
-				.xpath("/example:aggregateRecord/example:record", NAMESPACES)
-				.to(ENQUEUE_RECORD_ROUTE_ENDPOINT_URI);
-		
-		from(ENQUEUE_RECORD_ROUTE_ENDPOINT_URI)
-			.routeId(ENQUEUE_RECORD_ROUTE_ID)
-			.onException(Exception.class)
-				.redeliveryDelay(1000l)
-				.maximumRedeliveries(2)
-				.useExponentialBackOff()
-			.end()
-			.log(LoggingLevel.INFO, "Enqueuing record ${property.CamelSplitIndex} "
-					+ "of ${property.CamelSplitSize}")
-			.to(getEnqueueRecordsDestinationUri());
+	    
+        //   Log file info "Processing file: ${header.CamelFilePath}"
+        //   Validate using XSD at "org/example/model/model.xsd" on classpath
+        //   Split on XML nodes using XPATH /example:aggregateRecord/example:record"
+        //     log record info "Enqueuing record ${property.CamelSplitIndex} of ${property.CamelSplitSize}"
+        //     Enqueue
+        //       If error, try up to two more times w/ exponential backoff
+        //   Move completed file to a done folder and move files with a failure to a failed folder.
 	}
 
 	public String getSourceDirPath() {

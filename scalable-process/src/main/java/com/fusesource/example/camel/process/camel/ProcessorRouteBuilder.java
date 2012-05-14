@@ -68,46 +68,27 @@ public class ProcessorRouteBuilder extends RouteBuilder {
     public void configure() throws Exception {
         JaxbDataFormat jbdf = new JaxbDataFormat();
         jbdf.setContextPath(ObjectFactory.class.getPackage().getName());
-
-        from(getHandleRecordSourceUri()).routeId(HANDLE_RECORD_ROUTE_ID)
-            .transacted("JMS_PROPAGATION_REQUIRED")
-            .unmarshal(jbdf)
-            .log(LoggingLevel.INFO, "Handling record ${body.id}.")
-            .to(TRANSFORM_RECORD_ROUTE_ENDPOINT_URI)
-            .idempotentConsumer(simple("${in.body.id}"), idempotentRepository)
-            .to(PROCESS_RECORD_ROUTE_ENDPOINT_URI)
-            .to(PERSIST_RECORD_ROUTE_ENDPOINT_URI);
-
-        from(TRANSFORM_RECORD_ROUTE_ENDPOINT_URI)
-            .routeId(TRANSFORM_RECORD_ROUTE_ID)
-            .to("bean:recordProcessor?method=transform");
-
-        from(PROCESS_RECORD_ROUTE_ENDPOINT_URI)
-            .routeId(PROCESS_RECORD_ROUTE_ID)
-            .onException(RecoverableExternalServiceException.class)
-                .maximumRedeliveries(1)
-                .redeliveryDelay(1000l)
-                .logRetryAttempted(true)
-                .logRetryStackTrace(true)
-                .retryAttemptedLogLevel(LoggingLevel.WARN)
-            .end()
-            .onException(NonRecoverableExternalServiceException.class)
-                .log(LoggingLevel.ERROR,
-                        "Terminal error processing ${in.body}.  Failing-fast by forwarding to "
-                                + "error destination. ${exception.stacktrace}")
-                .to(ERROR_ROUTE_ENDPOINT_URI)
-                .handled(true)
-            .end()
-            .to("bean:recordProcessor?method=processRecord");
-
-        from(PERSIST_RECORD_ROUTE_ENDPOINT_URI)
-            .routeId(PERSIST_RECORD_ROUTE_ID)
-            .transacted("JDBC_PROPAGATION_REQUIRES_NEW")
-            .to(getPersistEndpointUri());
         
-        from(ERROR_ROUTE_ENDPOINT_URI)
-            .routeId(ERROR_ROUTE_ROUTE_ID)
-            .to(getErrorDestinationUri());
+        // From JMX queue
+        //   Using a TX defined by "JMS_PROPAGATION_REQUIRED"
+        //   Unmarshal XML
+        //   Log record info "Handling record ${body.id}."
+        //   Transform sub-routine
+        //   Remove duplicates using record ID "${in.body.id}"
+        //   Process sub-routine
+        //   Persist sub-routine
+        
+        // Transform sub-routine
+        //   Call recordProcessor method transform
+        
+        // Process sub-routine
+        //   Call recordProcessor method processRecord
+        //     If recoverable exception retry once and log info
+        //     If non-recoverable exception, log info and send to error sub-routine
+        //       "Terminal error processing ${in.body}.  Failing-fast by forwarding to error destination. ${exception.stacktrace}"
+        
+        // Persist sub-routine
+        //   Using a Tx defined by "JDBC_PROPAGATION_REQUIRES_NEW", save the record
     }
 
     public String getRecordsQueueName() {

@@ -82,56 +82,29 @@ public class SimpleFileIngestorRouteBuilder extends RouteBuilder {
 	    JaxbDataFormat jbdf = new JaxbDataFormat();
         jbdf.setContextPath(ObjectFactory.class.getPackage().getName());
 		
-		from(getFileSourceUri())
-			.routeId(READ_FILE_ROUTE_ID)
-			.log(LoggingLevel.INFO, "Processing file: ${header.CamelFilePath}")
-			.to("validator:org/example/model/model.xsd")
-			.split()
-			    .xpath("/example:aggregateRecord/example:record", NAMESPACES)
-			    .executorService(getContext().getExecutorServiceManager().newThreadPool(
-			            this, READ_FILE_ROUTE_ID, 10, 20))
-				.to(HANDLE_RECORD_ROUTE_ENDPOINT_URI);
-		
-        from(HANDLE_RECORD_ROUTE_ENDPOINT_URI)
-            .routeId(HANDLE_RECORD_ROUTE_ID)
-            .unmarshal(jbdf)
-            .log(LoggingLevel.INFO, "Handling record ${body.id}.")
-            .to(TRANSFORM_RECORD_ROUTE_ENDPOINT_URI)
-            .idempotentConsumer(simple("${in.body.id}"), idempotentRepository)
-            .to(PROCESS_RECORD_ROUTE_ENDPOINT_URI)
-            .to(PERSIST_RECORD_ROUTE_ENDPOINT_URI);
-    
-        from(TRANSFORM_RECORD_ROUTE_ENDPOINT_URI)
-            .routeId(TRANSFORM_RECORD_ROUTE_ID)
-            .to("bean:recordProcessor?method=transform");
-    
-        from(PROCESS_RECORD_ROUTE_ENDPOINT_URI)
-            .routeId(PROCESS_RECORD_ROUTE_ID)
-            .onException(RecoverableExternalServiceException.class)
-                .maximumRedeliveries(1)
-                .redeliveryDelay(1000l)
-                .logRetryAttempted(true)
-                .logRetryStackTrace(true)
-                .retryAttemptedLogLevel(LoggingLevel.WARN)
-            .end()
-            .onException(NonRecoverableExternalServiceException.class)
-                .log(LoggingLevel.ERROR,
-                        "Terminal error processing ${in.body}.  Failing-fast."
-                                + " ${exception.stacktrace}")
-            .end()
-            .to("bean:recordProcessor?method=processRecord");
-    
-        from(PERSIST_RECORD_ROUTE_ENDPOINT_URI)
-            .routeId(PERSIST_RECORD_ROUTE_ID)
-            .onException(SQLException.class)
-                .maximumRedeliveries(1)
-                .redeliveryDelay(1000l)
-                .logRetryAttempted(true)
-                .logRetryStackTrace(true)
-                .retryAttemptedLogLevel(LoggingLevel.WARN)
-            .end()
-            .transacted("JDBC_PROPAGATION_REQUIRES_NEW")
-            .to(getPersistEndpointUri());
+     // Poll for file
+        //   Log file info "Processing file: ${header.CamelFilePath}"
+        //   Validate against XSD (on classpath at org/example/model/model.xsd)
+        //   Split on XML nodes /example:aggregateRecord/example:record"
+        //     Unmarshal XML
+        //     log record info "Handling record ${body.id}."
+        //     Transform sub-routine
+        //     Remove duplicates using record ID "${in.body.id}"
+        //     Process sub-routine
+        //     Persist sub-routine
+        // Move completed file to a done folder and move files with a failure to a failed folder.
+        
+        // Transform sub-routine
+        //   Call recordProcessor method transform
+        
+        // Process sub-routine
+        //   Call recordProcessor method processRecord
+        //     If recoverable exception retry once and log info
+        //     If non-recoverable exception, log info.
+       
+        // Persist sub-routine
+        //   Using a Tx defined by "JDBC_PROPAGATION_REQUIRES_NEW", save the record
+        //     if SQL error, retry once and log info
 	}
 
 	public String getSourceDirPath() {

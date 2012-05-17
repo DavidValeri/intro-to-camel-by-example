@@ -82,17 +82,20 @@ public class SimpleFileIngestorRouteBuilder extends RouteBuilder {
 	    JaxbDataFormat jbdf = new JaxbDataFormat();
         jbdf.setContextPath(ObjectFactory.class.getPackage().getName());
 		
-     // Poll for file
+        // Poll for file
         //   Log file info "Processing file: ${header.CamelFilePath}"
         //   Validate against XSD (on classpath at org/example/model/model.xsd)
         //   Split on XML nodes /example:aggregateRecord/example:record"
-        //     Unmarshal XML
-        //     log record info "Handling record ${body.id}."
-        //     Transform sub-routine
-        //     Remove duplicates using record ID "${in.body.id}"
-        //     Process sub-routine
-        //     Persist sub-routine
+        //     Handle record sub-routing
         // Move completed file to a done folder and move files with a failure to a failed folder.
+        
+        // Handle Record Sub-routine
+        //   Unmarshal XML
+        //   Log record info "Handling record ${body.id}."
+        //   Transform sub-routine
+        //   Remove duplicates using record ID "${in.body.id}"
+        //   Process sub-routine
+        //   Persist sub-routine
         
         // Transform sub-routine
         //   Call recordProcessor method transform

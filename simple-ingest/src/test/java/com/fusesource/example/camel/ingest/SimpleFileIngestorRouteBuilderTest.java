@@ -171,11 +171,11 @@ public class SimpleFileIngestorRouteBuilderTest {
 	public void testInvalidSchema() throws Exception {
 	    context.start();
 	    
-		// not really atomic, but it works for tests
-        FileUtils.moveFile(
-        		new File("./target/test-classes/com/fusesource/example/camel/ingest/"
-        				+ "SimpleFileIngestorRouteBuilderTest.testInvalidSchema.xml"),
-        		new File(pollingFolder, "test.xml"));
+	    // not really atomic, but it works for tests
+	    FileUtils.copyFile(
+                new File("./target/test-classes/com/fusesource/example/camel/ingest/"
+                        + "SimpleFileIngestorRouteBuilderTest.testInvalidSchema.xml"),
+                new File(pollingFolder, "test.xml"));
         
         validateFileMove(true);
 	}

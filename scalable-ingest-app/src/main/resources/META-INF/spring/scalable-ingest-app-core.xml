@@ -17,9 +17,9 @@
         <!-- Normally pulled from an external file, but internalized for simplicity in
              this example. -->
         <props>
-          <prop key="com.fusesource.example.camel.ingest.source.dir">../test-data/source</prop>
+          <prop key="com.fusesource.example.camel.ingest.source.dir">${user.home}/camel-by-example/source</prop>
           
-          <prop key="com.fusesource.example.camel.jms.brokerUrl">tcp://localhost:61616</prop>
+          <prop key="com.fusesource.example.camel.jms.brokerUrl">failover:(tcp://localhost:61616)</prop>
         </props>
       </list>
     </property>

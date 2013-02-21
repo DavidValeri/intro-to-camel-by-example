@@ -15,16 +15,28 @@
   limitations under the License.
  -->
 <beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:jdbc="http://www.springframework.org/schema/jdbc"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="
            http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-           http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+           http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-3.0.xsd">
   
   <import resource="classpath:META-INF/spring/scalable-process-config.xml"/>
   <import resource="classpath:META-INF/spring/scalable-process-core.xml"/>
   <import resource="classpath:META-INF/spring/scalable-process-ibatis.xml"/>
   <import resource="classpath:META-INF/spring/scalable-process-jdbc.xml"/>
   <import resource="classpath:META-INF/spring/scalable-process-jms.xml"/>
+  
+  <!-- Clear/initialize the DB tables used for demo instance. -->
+  <jdbc:initialize-database data-source="jdbc.dataSource">
+    <jdbc:script location="classpath:sql/setup-hsql.sql"/>
+  </jdbc:initialize-database>
+  
+  <!-- Start the H2 web console so that users can easily inspect the DB after testing the application. -->
+  <bean id="h2WebServer" class="org.h2.tools.Server"
+    factory-method="createWebServer" init-method="start" destroy-method="stop">
+    <constructor-arg value="-web,-webAllowOthers,-webPort,8082" />
+  </bean>
   
   <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
     <property name="nullValue" value="-=NULL=-"></property>
@@ -35,12 +47,12 @@
              this example. -->
         <props>
           
-          <prop key="com.fusesource.example.camel.jdbc.driver.class">com.mysql.jdbc.Driver</prop>
-          <prop key="com.fusesource.example.camel.jdbc.url">jdbc:mysql://localhost:3306/test</prop>
-          <prop key="com.fusesource.example.camel.jdbc.username">test</prop>
-          <prop key="com.fusesource.example.camel.jdbc.password">password</prop>
+          <prop key="com.fusesource.example.camel.jdbc.driver.class">org.h2.Driver</prop>
+          <prop key="com.fusesource.example.camel.jdbc.url">jdbc:h2:mem:test</prop>
+          <prop key="com.fusesource.example.camel.jdbc.username">sa</prop>
+          <prop key="com.fusesource.example.camel.jdbc.password"></prop>
           
-          <prop key="com.fusesource.example.camel.jms.brokerUrl">tcp://localhost:61616</prop>
+          <prop key="com.fusesource.example.camel.jms.brokerUrl">failover:(tcp://localhost:61616)</prop>
         </props>
       </list>
     </property>

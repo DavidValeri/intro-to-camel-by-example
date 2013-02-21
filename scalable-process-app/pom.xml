@@ -57,5 +57,9 @@
     </dependency>
   </dependencies>
   
+  <properties>
+    <!-- The port used by the forked container -->
+    <cargo.container.port>8081</cargo.container.port>
+  </properties>  
 </project>
         

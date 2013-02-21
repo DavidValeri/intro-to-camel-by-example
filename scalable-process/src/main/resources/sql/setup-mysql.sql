@@ -1,10 +1,3 @@
-Databse Connection:
-
-URL: localhost:3306
-User/pass: test/password
-
-Database Setup:
-
 CREATE TABLE `camel_messageprocessed` (
   `processorName` varchar(255) NOT NULL,
   `messageId` varchar(100) NOT NULL,

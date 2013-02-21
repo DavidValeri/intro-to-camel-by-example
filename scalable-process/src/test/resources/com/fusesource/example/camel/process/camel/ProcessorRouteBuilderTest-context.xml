@@ -16,16 +16,23 @@
  -->
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:camel="http://camel.apache.org/schema/spring"
+       xmlns:jdbc="http://www.springframework.org/schema/jdbc"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="
            http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-           http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
+           http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd
+           http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-3.0.xsd">
   
   <import resource="classpath:META-INF/spring/scalable-process-core.xml"/>
   <import resource="classpath:META-INF/spring/scalable-process-ibatis.xml"/>
   <import resource="classpath:META-INF/spring/scalable-process-jdbc.xml"/>
   <import resource="classpath:META-INF/spring/scalable-process-jms.xml"/>
   <import resource="classpath:META-INF/spring/scalable-process-config.xml"/>
+  
+  <!-- Initialize the in-memory DB tables used for testing instance. -->
+  <jdbc:initialize-database data-source="jdbc.dataSource">
+    <jdbc:script location="classpath:sql/setup-hsql.sql"/>
+  </jdbc:initialize-database>
   
   <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
     <property name="propertiesArray">
@@ -46,7 +53,4 @@
       </list>
     </property>
   </bean>
-  
-  <!-- Override the JDBC based definition and use an in-memory implementation for testing. -->
-  <bean id="idempotentRepository" class="org.apache.camel.processor.idempotent.MemoryIdempotentRepository"/>
 </beans>

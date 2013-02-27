@@ -115,7 +115,7 @@ The application log file output will write to
 
     <EXAMPLE_ROOT>/scalable-process-app/target/cargo/logs/container.log
 
-The application hosts a web enabled database browser that you can use to examine the results of the application execution.  Use a browser to navigate to [http://localhost:8082](http://localhost:8082).  When the login prompt appears, enter "*jdbc:h2:mem:test*" into the JDBC URL field and click the *Connect* button.
+The application hosts a web enabled database browser that you can use to examine the results of the application execution.  Use a browser to navigate to [http://localhost:8082](http://localhost:8082).  When the login prompt appears, enter "jdbc:h2:mem:test" into the JDBC URL field and click the *Connect* button.
 
 You can examine the health of the different portions of the application and the ActiveMQ broker by using JMX.  Jconsole, a JMX user interface provided with your JVM is the easiest way to access this information.
 

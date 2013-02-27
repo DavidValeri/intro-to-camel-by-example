@@ -71,7 +71,7 @@ The application hosts a web enabled database browser that you can use to examine
 
 ### Running the "scalable" solution
 
-The scalable solution is a more robust solution to the use case that does provides the ability to scale the application beyond a single node.  This solution is representative of a second relelease of an application and demonstrates how Camel allows to modify and scale a route with relative ease.
+The scalable solution is a more robust solution to the use case that does provides the ability to scale the application beyond a single node.  This solution is representative of a second relelease of an application and demonstrates how Camel allows you to modify and scale a route with relative ease.
 
 Before running the scalable solution, start an ActiveMQ broker instance on your machine using the default configuration settings (port 61616).
 
@@ -91,7 +91,7 @@ An embedded Tomcat will launch with the application automatically deployed.  The
     
 The application log file output will write to 
 
-    <EXAMPLE_ROOT>/simple-ingest-app/target/cargo/logs/container.log
+    <EXAMPLE_ROOT>/scalable-ingest-app/target/cargo/logs/container.log
       
 To test the application, copy the files from
 
@@ -110,6 +110,10 @@ To run the message processing portion of the solution, navigate to
 then execute the following command
 
     mvn package cargo:run
+    
+The application log file output will write to 
+
+    <EXAMPLE_ROOT>/scalable-process-app/target/cargo/logs/container.log
 
 The application hosts a web enabled database browser that you can use to examine the results of the application execution.  Use a browser to navigate to [http://localhost:8082](http://localhost:8082).  When the login prompt appears, enter "*jdbc:h2:mem:test*" into the JDBC URL field and click the *Connect* button.
 

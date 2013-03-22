@@ -27,6 +27,8 @@
 
   <artifactId>camel-by-example-logic</artifactId>
   
+  <packaging>bundle</packaging>
+  
   <name>FuseSource :: Example :: Camel :: By Example :: Logic</name>
   
   <dependencies>

@@ -25,7 +25,7 @@
   <bean id="sqlMapClient"
         class="org.springframework.orm.ibatis.SqlMapClientFactoryBean">
     <property name="configLocation"
-              value="classpath:com/fusesource/example/camel/model/ibatis/IBatis-SqlMapConfig.xml" />
+              value="classpath:ibatis/IBatis-SqlMapConfig.xml" />
     <property name="dataSource" ref="jdbc.dataSource" />
     <property name="useTransactionAwareDataSource" value="true" />
   </bean>

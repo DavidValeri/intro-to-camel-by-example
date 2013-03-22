@@ -14,15 +14,21 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  -->
+ 
+<!-- 
+  This context file provides bean definitions used for demoing this artifact as an application deployed in OSGi.
+  The core of the application configuration/setup is done in the imported context files.  This file mainly exists
+  to provide resources used only in a demo such as in-memory DB schema setup, an in-memory DB web console, and
+  defaults for configuration properties that would typically be configured externally in a real deployment. 
+ -->
 <beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:camel="http://camel.apache.org/schema/spring"
        xmlns:jdbc="http://www.springframework.org/schema/jdbc"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="
            http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-           http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd
+           http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd
            http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-3.0.xsd">
-           
+  
   <import resource="classpath:META-INF/spring/simple-ingest-config.xml"/>
   <import resource="classpath:META-INF/spring/simple-ingest-core.xml"/>
   <import resource="classpath:META-INF/spring/simple-ingest-ibatis.xml"/>
@@ -32,22 +38,30 @@
   <jdbc:initialize-database data-source="jdbc.dataSource">
     <jdbc:script location="classpath:sql/setup-hsql.sql"/>
   </jdbc:initialize-database>
+
+  <!-- Start the H2 web console so that users can easily inspect the DB after testing the application. -->
+  <bean id="h2WebServer" class="org.h2.tools.Server"
+    factory-method="createWebServer" init-method="start" destroy-method="stop">
+    <constructor-arg value="-web,-webAllowOthers,-webPort,8082" />
+  </bean>
   
   <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
     <property name="nullValue" value="-=NULL=-"></property>
     <property name="propertiesArray">
       <list>
         <ref bean="defaultProperties"/>
-	    <props>
-	      <prop key="com.fusesource.example.camel.ingest.source.dir">./target/test-data/source</prop>
-          <prop key="com.fusesource.example.camel.ingest.test.alternatePersistUri">mock:output</prop>
+        <!-- Normally pulled from an external file, but internalized for simplicity in
+             this example. -->
+        <props>
+          <prop key="com.fusesource.example.camel.ingest.source.dir">${user.home}/camel-by-example/source</prop>
           
           <prop key="com.fusesource.example.camel.jdbc.driver.class">org.h2.Driver</prop>
           <prop key="com.fusesource.example.camel.jdbc.url">jdbc:h2:mem:test</prop>
           <prop key="com.fusesource.example.camel.jdbc.username">sa</prop>
           <prop key="com.fusesource.example.camel.jdbc.password"></prop>
-	    </props>
+        </props>
       </list>
     </property>
   </bean>
+  
 </beans>

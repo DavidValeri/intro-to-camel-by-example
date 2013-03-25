@@ -26,6 +26,8 @@
   </parent>
 
   <artifactId>camel-by-example-scalable-ingest</artifactId>
+
+  <packaging>bundle</packaging>
   
   <name>FuseSource :: Example :: Camel :: By Example :: Scalable Ingest</name>
   
@@ -74,6 +76,32 @@
       <artifactId>slf4j-log4j12</artifactId>
     </dependency>
   </dependencies>
+  
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.felix</groupId>
+        <artifactId>maven-bundle-plugin</artifactId>
+        <extensions>true</extensions>
+        <configuration>
+          <instructions>
+            <Import-Package>
+              <!-- This package is referenced only by a classpath resource string in a Camel route
+                   definition and is therefore not automatically detected. -->
+              <![CDATA[org.example.model; version="$<range;[==,+);1.0>",]]>
+              <!-- Auto import everything else. -->
+              *
+            </Import-Package>
+            <Export-Package>
+              <!-- We are not exposing an API or shared classes.  As such, we explicitly block everything from
+                   being exported -->
+              !*
+            </Export-Package>
+          </instructions>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
   
 </project>
         

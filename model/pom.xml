@@ -26,6 +26,8 @@
   </parent>
   
   <artifactId>camel-by-example-model</artifactId>
+
+  <packaging>bundle</packaging>
   
   <name>FuseSource :: Example :: Camel :: By Example :: Model</name>
   

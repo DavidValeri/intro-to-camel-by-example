@@ -26,6 +26,8 @@
   </parent>
 
   <artifactId>camel-by-example-simple-ingest</artifactId>
+
+  <packaging>bundle</packaging>
   
   <name>FuseSource :: Example :: Camel :: By Example :: Simple Ingest</name>
   
@@ -100,6 +102,38 @@
       <artifactId>slf4j-log4j12</artifactId>
     </dependency>
   </dependencies>
+  
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.felix</groupId>
+        <artifactId>maven-bundle-plugin</artifactId>
+        <extensions>true</extensions>
+        <configuration>
+          <instructions>
+            <Import-Package>
+              <!-- This package is referenced dynamically when loading the JDBC driver used in the demo.
+                   As such, it is not imported automatically.  If we are going to manage the data source
+                   ourselves, as opposed to exposing it in the container, we need to import the package of
+                   the driver class we intend to load or use dynamic imports. -->
+              <![CDATA[org.h2; version="$<range;[==,+);${h2.version}>",]]>
+              <!-- H2 is not an OSGi bundle.  Therefore, the plug-in does not assign a version number to the
+                   package imports from the H2 JAR.  To minimize variance, we limit the version to the known
+                   version that we want. -->
+              <![CDATA[org.h2.tools; version="$<range;[==,+);${h2.version}>",]]>
+              <!-- Auto import everything else. -->
+              *
+            </Import-Package>
+            <Export-Package>
+              <!-- We are not exposing an API or shared classes.  As such, we explicitly block everything from
+                   being exported -->
+              !*
+            </Export-Package>
+          </instructions>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
   
 </project>
         

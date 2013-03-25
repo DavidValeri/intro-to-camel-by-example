@@ -19,5 +19,5 @@
 
 <sqlMapConfig>
   <settings useStatementNamespaces="true" lazyLoadingEnabled="false"/>
-  <sqlMap resource="com/fusesource/example/camel/model/ibatis/IBatis-SqlMap.xml"/> 
+  <sqlMap resource="ibatis/IBatis-SqlMap.xml"/> 
 </sqlMapConfig>

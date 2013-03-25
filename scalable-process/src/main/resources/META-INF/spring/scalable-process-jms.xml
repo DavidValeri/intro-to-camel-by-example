@@ -34,6 +34,7 @@
         </property>
         <property name="redeliveryPolicy">
           <bean class="org.apache.activemq.RedeliveryPolicy">
+            <property name="queue" value=">"/>
             <property name="useExponentialBackOff" value="true"/>
             <property name="initialRedeliveryDelay" value="${com.fusesource.example.camel.jms.initialRedeliveryDelay}"/>
             <property name="maximumRedeliveries" value="${com.fusesource.example.camel.jms.maximumRedeliveries}"/>

@@ -45,7 +45,7 @@
         </props>
         <!-- Allow configuration via the configuration admin service.  Anything configured in the container
              will take precedent over the properties defined above -->
-        <osgix:cm-properties persistent-id="com.fusesource.example.camel.camel-by-example-scalable-ingest"/>
+        <osgix:cm-properties persistent-id="com.fusesource.example.camel.scalable.ingest"/>
       </list>
     </property>
   </bean>

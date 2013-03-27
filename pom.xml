@@ -55,6 +55,8 @@
     <cargo.container.port>8080</cargo.container.port>
     <!-- When using Tomcat, the AJP connector listen port -->
     <cargo.container.tomcat.ajp.port>8009</cargo.container.tomcat.ajp.port>
+    <!-- The RMI port used on the container.  For Tomcat, this is the value of the /Server/@port attribute. -->
+    <cargo.container.rmi.port>8205</cargo.container.rmi.port>
     <!-- Optional JVM arguments for the forked container that are prepended to the option
          that configures the Zommons config location and appended to any debugging 
          configuration set by cargo.container.jvmargs.debug (See cargo-debug profile.)-->
@@ -229,7 +231,7 @@
       <plugin>
         <groupId>org.codehaus.cargo</groupId>
         <artifactId>cargo-maven2-plugin</artifactId>
-        <version>1.2.3</version>
+        <version>1.3.3</version>
         <configuration>
           <container>
             <containerId>${cargo.container.id}</containerId>
@@ -256,6 +258,7 @@
                   </cargo.jvmargs>
                   <cargo.servlet.port>${cargo.container.port}</cargo.servlet.port>
                   <cargo.tomcat.ajp.port>${cargo.container.tomcat.ajp.port}</cargo.tomcat.ajp.port>
+                  <cargo.rmi.port>${cargo.container.rmi.port}</cargo.rmi.port>
                 </properties>
               </configuration>
               <deployables>

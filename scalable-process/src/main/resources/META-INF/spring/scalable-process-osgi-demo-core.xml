@@ -40,7 +40,7 @@
   <!-- Start the H2 web console so that users can easily inspect the DB after testing the application. -->
   <bean id="h2WebServer" class="org.h2.tools.Server"
     factory-method="createWebServer" init-method="start" destroy-method="stop">
-    <constructor-arg value="-web,-webAllowOthers,-webPort,8082" />
+    <constructor-arg value="-web,-webAllowOthers,-webPort,${com.fusesource.example.camel.h2.web.port}" />
   </bean>
   
   <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
@@ -60,11 +60,13 @@
           <prop key="com.fusesource.example.camel.jms.brokerUrl">discovery:(fabric:mq-west)</prop>
           <prop key="com.fusesource.example.camel.jms.user">admin</prop>
           <prop key="com.fusesource.example.camel.jms.password">admin</prop>
+          
+          <prop key="com.fusesource.example.camel.h2.web.port">8082</prop>
         </props>
         
         <!-- Allow configuration via the configuration admin service.  Anything configured in the container
              will take precedent over the properties defined above -->
-        <osgix:cm-properties persistent-id="com.fusesource.example.camel.camel-by-example-scalable-process"/>
+        <osgix:cm-properties persistent-id="com.fusesource.example.camel.scalable.process"/>
       </list>
     </property>
   </bean>

@@ -58,8 +58,10 @@
   </dependencies>
   
   <properties>
-    <!-- The port used by the forked container -->
+    <!-- Make the ports unique so we can run this instance while running the ingest instance on the same host. -->
     <cargo.container.port>8081</cargo.container.port>
+    <cargo.container.tomcat.ajp.port>8010</cargo.container.tomcat.ajp.port>
+    <cargo.container.rmi.port>8206</cargo.container.rmi.port>
   </properties>  
 </project>
         

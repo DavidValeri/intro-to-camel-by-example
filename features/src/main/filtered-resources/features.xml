@@ -35,6 +35,7 @@
       <feature>camel-core</feature>
       <feature>camel-ibatis</feature>
       <feature>camel-jaxb</feature>
+      <feature>camel-spring</feature>
       <feature>camel-sql</feature>
       <feature>camel-jms</feature>
       <feature>spring-orm</feature>

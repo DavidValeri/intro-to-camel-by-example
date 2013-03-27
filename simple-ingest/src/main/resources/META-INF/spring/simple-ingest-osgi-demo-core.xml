@@ -22,12 +22,15 @@
   defaults for configuration properties that would typically be configured externally in a real deployment. 
  -->
 <beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:jdbc="http://www.springframework.org/schema/jdbc"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+       xmlns:osgix="http://www.springframework.org/schema/osgi-compendium"
+       xmlns:osgi="http://www.springframework.org/schema/osgi"
        xsi:schemaLocation="
            http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-           http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd
-           http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-3.0.xsd">
+           http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-3.0.xsd
+           http://www.springframework.org/schema/osgi-compendium http://www.springframework.org/schema/osgi-compendium/spring-osgi-compendium.xsd
+           http://www.springframework.org/schema/osgi http://www.springframework.org/schema/osgi/spring-osgi.xsd">
   
   <import resource="classpath:META-INF/spring/simple-ingest-config.xml"/>
   <import resource="classpath:META-INF/spring/simple-ingest-core.xml"/>
@@ -60,6 +63,10 @@
           <prop key="com.fusesource.example.camel.jdbc.username">sa</prop>
           <prop key="com.fusesource.example.camel.jdbc.password"></prop>
         </props>
+        
+        <!-- Allow configuration via the configuration admin service.  Anything configured in the container
+             will take precedent over the properties defined above -->
+        <osgix:cm-properties persistent-id="com.fusesource.example.camel.simple.ingest"/>
       </list>
     </property>
   </bean>

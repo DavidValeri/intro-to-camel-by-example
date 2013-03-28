@@ -106,7 +106,8 @@
         <configuration>
           <instructions>
             <Import-Package>
-              <!-- This package is only referenced within an iBatis mapping file so it is not  -->
+              <!-- This package is only referenced within an iBatis mapping file so it is not automatically
+                   detected from this bundle.  -->
               com.fusesource.example.camel.model,
               <!-- Auto import everything else. -->
               *

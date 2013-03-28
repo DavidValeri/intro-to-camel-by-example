@@ -121,6 +121,9 @@
                    package imports from the H2 JAR.  To minimize variance, we limit the version to the known
                    version that we want. -->
               <![CDATA[org.h2.tools; version="$<range;[==,+);${h2.version}>",]]>
+              <!-- This package is only referenced within an iBatis mapping file so it is not automatically
+                   detected from this bundle.  -->
+              com.fusesource.example.camel.model,
               <!-- Auto import everything else. -->
               *
             </Import-Package>

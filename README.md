@@ -80,7 +80,7 @@ If you want to deploy the demo into your own servlet container, after building t
 
 After building the demo, add the following feature repository to the ESB by executing the following command in the ESB shell
 
-    features:add url mvn:com.fusesource.example.camel/camel-by-example-features/1.0-SNAPSHOT/xml/features
+    features:addurl mvn:com.fusesource.example.camel/camel-by-example-features/1.0-SNAPSHOT/xml/features
 
 Install the simple solution feature by executing the following command in the ESB shell
 
@@ -287,7 +287,7 @@ You can also run the scalable solution in Fuse ESB without Fabric by adding the 
 
 The following Fuse ESB console commands will provision the solution into the container.
 
-    features:add url mvn:com.fusesource.example.camel/camel-by-example-features/1.0-SNAPSHOT/xml/features
+    features:addurl mvn:com.fusesource.example.camel/camel-by-example-features/1.0-SNAPSHOT/xml/features
     
 Use the console to provision configuration properties for the scalable solution.  These properties will disable the use of Fabric and use explicit configuration settings for the physical location of the message broker.  Note that you will need to identify the port that the embedded broker instance is using and modify the broker URLs below if you are not using a broker running on port 61616.
 
@@ -318,4 +318,4 @@ to
 
 The application hosts a web enabled database browser that you can use to examine the results of the application execution.  Use a browser to navigate to [http://localhost:8082](http://localhost:8082).  When the login prompt appears, enter "*jdbc:h2:mem:test*" into the JDBC URL field and click the *Connect* button.
 
-When deployed in Fuse ESB, the application exposes configuration options through the OSGi Configuration Admin Service.  You may override any of the configuration properties in the demo by defining the property in the Configuration Admin Service under the PID *com.fusesource.example.camel.simple.ingest*.  You do not need to define any properties.  The example only exposes configuration options in this manner to demonstrate the possibilities available through integration with the OSGi container.
+When deployed in Fuse ESB, the application exposes configuration options through the OSGi Configuration Admin Service.  You may override any of the configuration properties in the demo by defining the property in the Configuration Admin Service under the PID *com.fusesource.example.camel.scalable.ingest* and *com.fusesource.example.camel.scalable.process*.  You do not need to define any properties.  The example only exposes configuration options in this manner to demonstrate the possibilities available through integration with the OSGi container.
